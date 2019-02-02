@@ -1,7 +1,8 @@
-﻿using SM.Models.Enums;
+﻿using SM.Common.Enums;
+using SM.Common.Interfaces;
 using System;
 
-namespace SM.Models
+namespace SM.Common.Models
 {
     /// <summary>
     /// Defines a student.
