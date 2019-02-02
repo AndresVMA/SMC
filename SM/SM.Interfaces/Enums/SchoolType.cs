@@ -18,6 +18,6 @@
         /// <summary>
         /// Kinder Garden school.
         /// </summary>
-        KinderGarden
+        Kinder
     }
 }

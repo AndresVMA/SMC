@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SM.Common.Interfaces
@@ -9,6 +10,13 @@ namespace SM.Common.Interfaces
     /// <typeparam name="T">The record type.</typeparam>
     public interface IDataService<T> where T: class, IModel
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="adapter"></param>
+        /// <returns></returns>
+        Task<ICollection<T>> GetAllAsync(IModelAdapter<T> adapter);
+
         /// <summary>
         /// Gets a record from the store.
         /// </summary>

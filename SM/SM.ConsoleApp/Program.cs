@@ -7,7 +7,7 @@ namespace SM.ConsoleApp
         static void Main(string[] args)
         {
             var mainUi = new MenuManager();
-            mainUi.Render().Wait();
+            mainUi.Render(args).Wait();
         }
     }
 }

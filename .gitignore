@@ -32,3 +32,5 @@ artifacts/
 
 # NuGet Packages
 *.nupkg
+/SM/SM.ConsoleApp/output-win-x64
+/SM/SM.ConsoleApp/Properties/PublishProfiles
