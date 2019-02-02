@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System;
 using SM.DataService.CSV.Adapters;
 using System.Collections.Generic;
-using System.Linq;
+using SM.DataService.CSV.Helpers;
 
 namespace SM.ConsoleApp.Menus
 {
@@ -27,9 +27,14 @@ namespace SM.ConsoleApp.Menus
         public async Task ExecuteOption()
         {
             IEnumerable<Student> students = await _service.GetAllAsync(_modelAdapter);
-            if (SearchArguments != null)
+            if (SearchArguments != null && AutomaticRun)
             {
-                students = FilteredStudents(students);
+                students = FilterHelper.FilterStudents(students, SearchArguments);
+            }
+            else
+            {
+                var searchArguments = PromptSearchCriteria();
+                students = FilterHelper.FilterStudents(students, searchArguments);
             }
             Console.WriteLine("Search results:");
             Console.Write($"{nameof(Student.SchoolType)}\t");
@@ -49,49 +54,12 @@ namespace SM.ConsoleApp.Menus
             Console.ReadKey();
         }
 
-        private IEnumerable<Student> FilteredStudents(IEnumerable<Student> studentList)
+        private IEnumerable<string> PromptSearchCriteria()
         {
-            IEnumerable<Student> filterResult = studentList;
-            foreach (var filter in SearchArguments)
-            {
-                var equalSignIndex = filter.IndexOf("=");
-                var property = filter.Substring(0, equalSignIndex);
-                var filterValue = filter.Substring(equalSignIndex + 1);
-                filterResult = FilterByProperty(filterResult, property, filterValue);
-            }
-
-            return filterResult;
-        }
-
-        private IEnumerable<Student> FilterByProperty(
-            IEnumerable<Student> studentList, 
-            string propertyName, 
-            string propertyValue)
-        {
-            IEnumerable<Student> filterResult = studentList;
-            Func<Student, bool> predicate = null;
-            switch (propertyName)
-            {
-                case "type":
-                    predicate = s => s.SchoolType.ToString()
-                        .Equals(propertyValue, StringComparison.InvariantCultureIgnoreCase);
-                    break;
-                case "name":
-                    predicate = s => s.Name.ToString()
-                        .Equals(propertyValue, StringComparison.InvariantCultureIgnoreCase);
-                    break;
-                case "gender":
-                    predicate = s => s.Gender.ToString()
-                        .Equals(propertyValue, StringComparison.InvariantCultureIgnoreCase);
-                    break;
-                default:
-                    break;
-            }
-            if (predicate != null)
-            {
-                filterResult = studentList.Where(predicate).Select(s => s);
-            }
-            return filterResult;
+            Console.WriteLine("Please enter a search criteria, e.g. type=High");
+            Console.WriteLine("Multiple search criterias can be specified separated by one space.");
+            var searchCriteria = InputManager.GetValidSearchCriteria("Search Criteria: ");
+            return searchCriteria.Split(" ");
         }
     }
 }

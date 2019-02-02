@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace SM.ConsoleApp
 {
@@ -31,6 +32,21 @@ namespace SM.ConsoleApp
                 response = Console.ReadLine();
             }
             return response[0];
+        }
+
+        internal static string GetValidSearchCriteria(string promptMessage)
+        {
+            Console.Write(promptMessage);
+            var regex = new Regex(@"([a-zA-Z]*=\w*)*");
+            var response = Console.ReadLine();
+            while (string.IsNullOrWhiteSpace(response)
+                || !regex.IsMatch(response))
+            {
+                Console.WriteLine($"Invalid criteria, Please try again.");
+                Console.Write(promptMessage);
+                response = Console.ReadLine();
+            }
+            return response;
         }
     }
 }
