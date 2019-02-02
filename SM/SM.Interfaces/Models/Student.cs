@@ -17,7 +17,7 @@ namespace SM.Common.Models
         /// <summary>
         /// Gets or sets the student type.
         /// </summary>
-        public SchoolType Type { get; set; }
+        public SchoolType SchoolType { get; set; }
 
         /// <summary>
         /// Gets or sets the student gender.
@@ -38,5 +38,13 @@ namespace SM.Common.Models
         /// Gets or sets the student Id.
         /// </summary>
         public Guid Id { get; set; }
+
+        public override string ToString()
+        {
+            var schoolType = SchoolType.ToString();
+            var gender = Gender == GenderType.Female ? 'F' : 'M';
+            var timestamp = new DateTimeOffset(LastModifiedDate).ToUnixTimeSeconds();
+            return $"{schoolType},{Name},{gender},{timestamp}";
+        }
     }
 }

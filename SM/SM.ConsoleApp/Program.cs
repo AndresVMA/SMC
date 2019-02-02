@@ -6,7 +6,8 @@ namespace SM.ConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var mainUi = new MenuManager();
+            mainUi.Render().Wait();
         }
     }
 }
