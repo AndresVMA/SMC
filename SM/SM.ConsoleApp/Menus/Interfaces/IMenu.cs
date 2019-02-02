@@ -9,5 +9,6 @@ namespace SM.ConsoleApp.Menus
         string Name { get; }
         void Display();
         IMenuOperation ProcessInput();
+        IMenuOperation AutomaticRunOperation { get; }
     }
 }

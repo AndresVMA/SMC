@@ -16,13 +16,14 @@ namespace SM.ConsoleApp.Menus
         private const string SchoolTypeMessage = "Enter the student shool type: (H) High, E (Elementary), K (Kinder Garden): ";
         private readonly List<char> _validGenderTypes = new List<char> { 'M', 'F' };
         private readonly List<char> _validSchoolTypes = new List<char> { 'H', 'E', 'K' };
+        public bool AutomaticRun { get; set; }
+        public string Name => "Create";
+
         public CreateStudent(StudentsMenu mainMenu, IDataService<Student> service)
         {
             _parentMenu = mainMenu;
             _service = service;
         }
-
-        public string Name => "Create";
 
         public async Task ExecuteOption()
         {
@@ -32,7 +33,7 @@ namespace SM.ConsoleApp.Menus
             var gender = InputManager.GetValidCharEntry(GenderMessage, _validGenderTypes);
             student.Gender = gender == 'M' ? GenderType.Male : GenderType.Female;
             var schoolType = InputManager.GetValidCharEntry(SchoolTypeMessage, _validSchoolTypes);
-            student.SchoolType = schoolType == 'H' ? SchoolType.High : (schoolType == 'E'? SchoolType.Elementary : SchoolType.KinderGarden);
+            student.SchoolType = schoolType == 'H' ? SchoolType.High : (schoolType == 'E'? SchoolType.Elementary : SchoolType.Kinder);
             var result = await _service.CreateAsync(student);
             if (result)
             {

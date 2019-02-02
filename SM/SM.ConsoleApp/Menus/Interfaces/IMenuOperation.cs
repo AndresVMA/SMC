@@ -6,5 +6,6 @@ namespace SM.ConsoleApp.Menus
     {
         string Name { get; }
         Task ExecuteOption();
+        bool AutomaticRun { get; set; }
     }
 }

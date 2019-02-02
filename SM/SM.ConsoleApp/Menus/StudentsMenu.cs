@@ -3,6 +3,7 @@ using SM.Common.Models;
 using SM.DataService.CVS;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SM.ConsoleApp.Menus
 {
@@ -11,19 +12,22 @@ namespace SM.ConsoleApp.Menus
     /// </summary>
     public class StudentsMenu : IMenu
     {
-        IList<IMenuOperation> _menuItems;
+        private IList<IMenuOperation> _menuItems;
         public string Name => "Main Menu";
+        public IMenuOperation AutomaticRunOperation => _menuItems.Where(op => op.AutomaticRun).FirstOrDefault();
         /// <summary>
         /// 
         /// </summary>
-        public StudentsMenu()
+        public StudentsMenu(string fileName = "", IEnumerable<string> searchArguments = null)
         {
-            IDataService<Student> service = new CSVDataService<Student>();
+            var autoRunSearch = !string.IsNullOrWhiteSpace(fileName)
+                && searchArguments != null && searchArguments.Any();
+            IDataService<Student> service = new CSVDataService<Student>(fileName);
             _menuItems = new List<IMenuOperation>()
             {
                 new CreateStudent(this, service),
                 new DeleteStudent(this, service),
-                new Search(this, service),
+                new Search(this, service) { AutomaticRun = autoRunSearch, SearchArguments = searchArguments},
                 new Exit(this)
             };
         }

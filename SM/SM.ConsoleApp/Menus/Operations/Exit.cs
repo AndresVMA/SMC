@@ -5,14 +5,16 @@ using System.Threading.Tasks;
 
 namespace SM.ConsoleApp.Menus
 {
-    public class Exit : IMenuOperation
+    internal class Exit : IMenuOperation
     {
         private StudentsMenu mainMenu;
+        public string Name => "Exit";
+        public bool AutomaticRun { get; set; }
+
         public Exit(StudentsMenu mainMenu)
         {
             this.mainMenu = mainMenu;
         }
-        public string Name => "Exit";
 
         public async Task ExecuteOption()
         {

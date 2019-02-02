@@ -8,13 +8,14 @@ namespace SM.ConsoleApp.Menus
     {
         private StudentsMenu _mainMenu;
         private IDataService<Student> _service;
+        public bool AutomaticRun { get; set; }
+        public string Name => "Delete";
+
         public DeleteStudent(StudentsMenu mainMenu, IDataService<Student> service)
         {
             _mainMenu = mainMenu;
             _service = service;
         }
-
-        public string Name => "Delete";
 
         public Task ExecuteOption()
         {
