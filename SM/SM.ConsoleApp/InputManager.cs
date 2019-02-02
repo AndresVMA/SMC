@@ -37,7 +37,7 @@ namespace SM.ConsoleApp
         internal static string GetValidSearchCriteria(string promptMessage)
         {
             Console.Write(promptMessage);
-            var regex = new Regex(@"([a-zA-Z]*=\w*)*");
+            var regex = new Regex(@"([a-zA-Z]*\=\w*)+");
             var response = Console.ReadLine();
             while (string.IsNullOrWhiteSpace(response)
                 || !regex.IsMatch(response))
