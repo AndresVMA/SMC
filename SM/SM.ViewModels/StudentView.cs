@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the view to display a Student
     /// </summary>
-    public interface IStudentView
+    public class StudentView
     {
         /// <summary>
         ///

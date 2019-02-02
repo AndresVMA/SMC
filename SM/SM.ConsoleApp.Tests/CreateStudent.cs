@@ -13,7 +13,7 @@ namespace SM.ConsoleApp.Tests
             var student = new Student()
             {
                 Name = "Obiwan",
-                Type = SchoolType.High,
+                SchoolType = SchoolType.High,
                 Gender = GenderType.Male,
                 LastModifiedDate = DateTime.Now
             };
