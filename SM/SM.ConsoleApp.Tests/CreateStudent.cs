@@ -3,7 +3,7 @@ using SM.Common.Models;
 using System;
 using Xunit;
 
-namespace SM.ConsoleApp.Tests
+namespace SM.DataService.CSV.Tests
 {
     public class CreateStudent
     {

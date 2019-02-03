@@ -7,12 +7,13 @@ using SM.Common.Enums;
 
 namespace SM.DataService.CSV.Adapters
 {
-    public class StudentAdapter : IModelAdapter<Student>
+    public class CsvAdapter<T> : IModelAdapter<T> where T : class, IModel
     {
-        public ICollection<Student> GetModels(dynamic modelData)
+        public ICollection<Student> GetStudentModels(dynamic data)
         {
-            string[] studentsRawData = (string[])modelData;
+            string[] studentsRawData = (string[])data;
             var students = new List<Student>();
+            var virtualStudentId = 1;
             foreach (var item in studentsRawData)
             {
                 var studentRaw = item.Split(',');
@@ -21,6 +22,7 @@ namespace SM.DataService.CSV.Adapters
                 var timestamp = studentRaw[3];
                 students.Add(new Student()
                 {
+                    Id = virtualStudentId++,
                     Name = studentRaw[1],
                     SchoolType = schoolType.ToEnum<SchoolType>(),
                     Gender = gender.ToGender(),
@@ -29,6 +31,14 @@ namespace SM.DataService.CSV.Adapters
             }
 
             return students;
+        }
+        public ICollection<T> GetModels(dynamic modelData)
+        {
+            if (typeof(T) == typeof(Student))
+            {
+                return GetStudentModels(modelData);
+            }
+            return new List<T>();
         }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using SM.DataService.CSV.Adapters;
 using System.Collections.Generic;
 using SM.DataService.CSV.Helpers;
+using SM.Common.Enums;
 
 namespace SM.ConsoleApp.Menus
 {
@@ -12,7 +13,6 @@ namespace SM.ConsoleApp.Menus
     {
         private StudentsMenu _mainMenu;
         private IDataService<Student> _service;
-        private IModelAdapter<Student> _modelAdapter;
         public bool AutomaticRun { get; set; }
         public string Name => "Search";
         public IEnumerable<string> SearchArguments { get; internal set; }
@@ -21,12 +21,11 @@ namespace SM.ConsoleApp.Menus
         {
             _mainMenu = mainMenu;
             _service = service;
-            _modelAdapter = new StudentAdapter();
         }
 
         public async Task ExecuteOption()
         {
-            IEnumerable<Student> students = await _service.GetAllAsync(_modelAdapter);
+            IEnumerable<Student> students = await _service.GetAllAsync();
             if (SearchArguments != null && AutomaticRun)
             {
                 students = FilterHelper.FilterStudents(students, SearchArguments);
@@ -37,15 +36,19 @@ namespace SM.ConsoleApp.Menus
                 students = FilterHelper.FilterStudents(students, searchArguments);
             }
             Console.WriteLine("Search results:");
+            Console.Write($"{nameof(Student.Id)}\t");
             Console.Write($"{nameof(Student.SchoolType)}\t");
-            Console.Write($"{nameof(Student.Name)}\t");
+            Console.Write($"{nameof(Student.Name)}\t\t");
             Console.Write($"{nameof(Student.Gender)}\t");
             Console.Write($"{nameof(Student.LastModifiedDate)}\t");
             Console.WriteLine();
             foreach (var student in students)
             {
-                Console.Write($"{student.SchoolType}\t\t");
-                Console.Write($"{student.Name}\t");
+                var space = student.SchoolType == SchoolType.Elementary ? "\t" : "\t\t";
+                var nameSpace = student.Name.Length <= 7 ? "\t\t" : "\t";
+                Console.Write($"{student.Id}\t");
+                Console.Write($"{student.SchoolType}{space}");
+                Console.Write($"{student.Name}{nameSpace}");
                 Console.Write($"{student.Gender}\t");
                 Console.Write($"{student.LastModifiedDate}\t");
                 Console.WriteLine();

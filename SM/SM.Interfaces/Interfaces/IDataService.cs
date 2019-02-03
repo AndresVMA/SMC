@@ -15,14 +15,14 @@ namespace SM.Common.Interfaces
         /// </summary>
         /// <param name="adapter"></param>
         /// <returns></returns>
-        Task<ICollection<T>> GetAllAsync(IModelAdapter<T> adapter);
+        Task<ICollection<T>> GetAllAsync();
 
         /// <summary>
         /// Gets a record from the store.
         /// </summary>
         /// <param name="recordId">The identifier of the record to get.</param>
         /// <returns></returns>
-        Task<T> GetAsync(Guid recordId);
+        Task<T> GetAsync(int recordId);
 
         /// <summary>
         /// Creates a record on the store.
@@ -36,6 +36,6 @@ namespace SM.Common.Interfaces
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        Task<bool> DeleteAsync(Guid recordId);
+        Task<bool> DeleteAsync(int recordId);
     }
 }
