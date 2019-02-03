@@ -28,7 +28,7 @@ First it is necessary to have installed .NetCore 2.1 on your machine
 * If .Net Core 2.1 is not installed you can found the  SDK on this [Link](https://dotnet.microsoft.com/download/dotnet-core/2.1)
 
 ### Running the console app
-Application arguments can be spefied inside visual studio or an executable can be created runing the following command inside the following folder: SM\SM.ConsoleApp
+Application arguments can be specified inside visual studio or also an executable can be created runing the following command inside the following folder: SM\SM.ConsoleApp
 ```sh
 SM\SM.ConsoleApp> dotnet publish -c Debug -r win10-x64
 ```
