@@ -1,4 +1,5 @@
 ﻿using SM.Common.Interfaces;
+using SM.DataService.CSV;
 using SM.DataService.CSV.Adapters;
 using System;
 using System.Collections.Generic;
@@ -25,32 +26,39 @@ namespace SM.DataService.CVS
         }
 
         /// <summary>
-        /// Saves a record into the store.
+        /// Saves a record into a CSV file.
         /// </summary>
-        /// <param name="record"></param>
-        /// <returns></returns>
+        /// <param name="record">The record to save.</param>
+        /// <returns>A value indicating whether or not the record was created.</returns>
         public async Task<bool> CreateAsync(T record)
         {
             record.LastModifiedDate = DateTime.Now;
             try
             {
-                await File.AppendAllLinesAsync(_csvPath, new List<string> { record.ToString() });
+                await File.AppendAllLinesAsync(_csvPath, new List<string> { record.ToCsv() });
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
         }
 
         /// <summary>
-        /// Deletes a record
+        /// Deletes a record from the CSV file.
         /// </summary>
-        /// <param name="recordId"></param>
+        /// <param name="recordId">The id of the record to delete.</param>
         /// <returns></returns>
         public async Task<bool> DeleteAsync(int recordId)
         {
             var allRecords = await GetAllAsync();
+            var recordIdExists = allRecords
+                .Where(record => record.Id == recordId).Any();
+            if (!recordIdExists)
+            {
+                return false;
+            }
+
             var csvLines = allRecords
                 .Where(record => record.Id != recordId)
                 .Select(record => record.ToString());
@@ -67,7 +75,7 @@ namespace SM.DataService.CVS
         }
 
         /// <summary>
-        /// 
+        /// Gets a record from the CSV based on its Id.
         /// </summary>
         /// <param name="recordId"></param>
         /// <returns></returns>
@@ -78,7 +86,7 @@ namespace SM.DataService.CVS
         }
 
         /// <summary>
-        /// 
+        /// Gets all records from the CSV file.
         /// </summary>
         /// <param name="adapter"></param>
         /// <returns></returns>

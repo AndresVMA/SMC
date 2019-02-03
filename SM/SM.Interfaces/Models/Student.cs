@@ -38,13 +38,5 @@ namespace SM.Common.Models
         /// Gets or sets the student Id.
         /// </summary>
         public int Id { get; set; }
-
-        public override string ToString()
-        {
-            var schoolType = SchoolType.ToString();
-            var gender = Gender == GenderType.Female ? 'F' : 'M';
-            var timestamp = LastModifiedDate.ToString("yyyyMMddHHmmss");
-            return $"{schoolType},{Name},{gender},{timestamp}";
-        }
     }
 }
