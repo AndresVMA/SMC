@@ -39,7 +39,7 @@ namespace SM.DataService.CSV.Helpers
                     break;
                 case "name":
                     predicate = s => s.Name.ToString()
-                        .Contains(propertyValue, StringComparison.InvariantCultureIgnoreCase);
+                        .StartsWith(propertyValue, StringComparison.InvariantCultureIgnoreCase);
                     orderPredicate = s => s.Name;
                     break;
                 case "gender":

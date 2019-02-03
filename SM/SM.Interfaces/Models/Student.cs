@@ -37,7 +37,7 @@ namespace SM.Common.Models
         /// <summary>
         /// Gets or sets the student Id.
         /// </summary>
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public override string ToString()
         {

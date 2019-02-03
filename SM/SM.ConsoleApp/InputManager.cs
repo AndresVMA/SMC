@@ -48,5 +48,20 @@ namespace SM.ConsoleApp
             }
             return response;
         }
+
+        internal static int GetValidInteger(string promptMessage)
+        {
+            Console.Write(promptMessage);
+            var response = Console.ReadLine();
+            var intResult = 0;
+            while (string.IsNullOrWhiteSpace(response)
+                || !int.TryParse(response, out intResult))
+            {
+                Console.WriteLine($"Invalid value, Please try again.");
+                Console.Write(promptMessage);
+                response = Console.ReadLine();
+            }
+            return intResult;
+        }
     }
 }

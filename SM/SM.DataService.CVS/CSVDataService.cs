@@ -1,7 +1,9 @@
 ﻿using SM.Common.Interfaces;
+using SM.DataService.CSV.Adapters;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SM.DataService.CVS
@@ -12,12 +14,14 @@ namespace SM.DataService.CVS
     /// <typeparam name="T">The type of record to operate with.</typeparam>
     public class CSVDataService<T> : IDataService<T> where T: class, IModel
     {
-        const string defaultStore = "Students.csv";  
+        private const string DefaultStore = "Students.csv";  
         private string _csvPath;
+        private IModelAdapter<T> _adapter;
         public CSVDataService(string csvPath)
         {
+            _adapter = new CsvAdapter<T>();
             _csvPath = string.IsNullOrWhiteSpace(csvPath) ?
-                $"{AppDomain.CurrentDomain.BaseDirectory}{defaultStore}" : csvPath;
+                $"{AppDomain.CurrentDomain.BaseDirectory}{DefaultStore}" : csvPath;
         }
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace SM.DataService.CVS
                 await File.AppendAllLinesAsync(_csvPath, new List<string> { record.ToString() });
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -44,9 +48,22 @@ namespace SM.DataService.CVS
         /// </summary>
         /// <param name="recordId"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteAsync(Guid recordId)
+        public async Task<bool> DeleteAsync(int recordId)
         {
-            throw new NotImplementedException();
+            var allRecords = await GetAllAsync();
+            var csvLines = allRecords
+                .Where(record => record.Id != recordId)
+                .Select(record => record.ToString());
+            try
+            {
+                await File.WriteAllLinesAsync(_csvPath, csvLines);
+                return true;
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -54,9 +71,10 @@ namespace SM.DataService.CVS
         /// </summary>
         /// <param name="recordId"></param>
         /// <returns></returns>
-        public async Task<T> GetAsync(Guid recordId)
+        public async Task<T> GetAsync(int recordId)
         {
-            throw new NotImplementedException();
+            var allRecords = await GetAllAsync();
+            return allRecords.Where(record => record.Id == recordId).FirstOrDefault();
         }
 
         /// <summary>
@@ -64,10 +82,10 @@ namespace SM.DataService.CVS
         /// </summary>
         /// <param name="adapter"></param>
         /// <returns></returns>
-        public async Task<ICollection<T>> GetAllAsync(IModelAdapter<T> adapter)
+        public async Task<ICollection<T>> GetAllAsync()
         {
             var rawData = await File.ReadAllLinesAsync(_csvPath);
-            return adapter.GetModels(rawData);
+            return _adapter.GetModels(rawData);
         }
     }
 }
